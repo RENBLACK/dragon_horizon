@@ -9,7 +9,7 @@ fn dragon_horizon_hud(
     });
 
     let (w, h) = (80.0_f32, 8.0_f32);
-    let [x, y] = corners.place(horizon_client::extras::Corner::BottomLeft, w, h + 10.0);
+    let (x, y) = corners.place(horizon_client::extras::Corner::BottomLeft, w, h + 10.0);
 
     game.native_fill(batch, [x, y + 10.0, w, h], 0xFF202020);
     game.native_fill(batch, [x, y + 10.0, w * fraction, h], crate::game::dragon_horizon::bar_color(fraction));
