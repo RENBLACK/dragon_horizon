@@ -1,8 +1,6 @@
 [mod]
 id = "dragon_horizon"
-name = "Dragon Horizon"
 version = "0.1.0"
-authors = ["RENBLACK"]
 
 [[injections]]
 id = "hud"
