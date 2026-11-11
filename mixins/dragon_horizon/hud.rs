@@ -3,7 +3,6 @@ fn render_dragon_hud(#[binding] _game: &mut horizon_client::game::native_hooks::
         let current_ki = state.ki.current();
         let max_ki = state.ki.max();
         let fraction = state.ki.fraction();
-        
         let _color = crate::game::dragon_horizon::runtime::bar_color(fraction);
         let _ = (current_ki, max_ki, fraction);
     });
