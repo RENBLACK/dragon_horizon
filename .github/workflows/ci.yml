@@ -12,12 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fix DNS and Apt Mirrors
+      - name: Fix Mirrors and Install Dependencies
         run: |
-          sudo bash -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
-          sudo bash -c 'echo "nameserver 1.1.1.1" >> /etc/resolv.conf'
-          for i in {1..3}; do sudo apt-get update --fix-missing && break || sleep 5; done
-          for i in {1..3}; do sudo apt-get install -y --fix-missing libasound2-dev libudev-dev && break || sleep 5; done
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list /etc/apt/sources.list.d/* || true
+          sudo sed -i 's|http://security.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list /etc/apt/sources.list.d/* || true
+          sudo apt-get update -o Acquire::Retries=5 -o Acquire::http::Timeout="30"
+          sudo apt-get install -y --no-install-recommends libasound2-dev libudev-dev
 
       - name: Run Horizon Native Check
         run: python3 horizon-mods/native/tools/native.py check dragon_horizon
