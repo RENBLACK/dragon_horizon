@@ -1,4 +1,3 @@
-#![allow(dead_code)]
 #[allow(dead_code)]
 // Lógica pura do mod Dragon Horizon: Ki e atributos.
 // Não depende de nada do Horizon, então roda com `cargo test`.
