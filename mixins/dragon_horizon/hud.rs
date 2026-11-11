@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 fn dragon_horizon_hud(
     game: &mut crate::game::Game<'_>,
     batch: &mut horizon_client::hud::HudBatch,
