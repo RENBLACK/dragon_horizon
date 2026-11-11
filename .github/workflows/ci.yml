@@ -1,0 +1,23 @@
+name: Native Build Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  native-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fix DNS and Apt Mirrors
+        run: |
+          sudo bash -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
+          sudo bash -c 'echo "nameserver 1.1.1.1" >> /etc/resolv.conf'
+          for i in {1..3}; do sudo apt-get update --fix-missing && break || sleep 5; done
+          for i in {1..3}; do sudo apt-get install -y --fix-missing libasound2-dev libudev-dev && break || sleep 5; done
+
+      - name: Run Horizon Native Check
+        run: python3 horizon-mods/native/tools/native.py check dragon_horizon
