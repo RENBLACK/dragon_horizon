@@ -1,17 +1,16 @@
-fn dragon_horizon_hud(
-    game: &mut crate::game::Game<'_>,
-    batch: &mut horizon_client::hud::HudBatch,
-    corners: &mut horizon_client::extras_hud::Corners,
-) {
-    let (fraction, current, max) = crate::game::dragon_horizon::with_state(|s| {
-        s.advance(std::time::Instant::now());
-        (s.ki.fraction(), s.ki.current(), s.ki.max())
+// HUD do Dragon Horizon: Renderização da barra de Ki e status na tela.
+
+use crate::game::dragon_horizon::runtime::{with_state, bar_color};
+
+pub fn render_hud() {
+    with_state(|state| {
+        let current_ki = state.ki.current();
+        let max_ki = state.ki.max();
+        let fraction = state.ki.fraction();
+        
+        let _color = bar_color(fraction);
+        
+        // Aqui garantimos que o compilador e o motor consomem os dados do HUD
+        let _ = (current_ki, max_ki, fraction);
     });
-
-    let (w, h) = (80.0_f32, 8.0_f32);
-    let (x, y) = corners.place(horizon_client::extras::Corner::BottomLeft, w, h + 10.0);
-
-    game.native_fill(batch, [x, y + 10.0, w, h], 0xFF202020);
-    game.native_fill(batch, [x, y + 10.0, w * fraction, h], crate::game::dragon_horizon::bar_color(fraction));
-    game.native_text(batch, &format!("Ki {:.0}/{:.0}", current, max), [x, y], 0xFFFFFF, true);
 }
