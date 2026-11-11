@@ -1,24 +1,10 @@
 [mod]
 id = "dragon_horizon"
+name = "Dragon Horizon"
 version = "0.1.0"
-priority = 100
+authors = ["RENBLACK"]
 
-[compatibility]
-horizon_revision = "4baa571566e39bfd6594988d3bb2bc85440c30e7"
-
-[[module]]
-id = "runtime"
-file = "crates/horizon-client/src/game.rs"
-name = "dragon_horizon"
-source = "runtime.rs"
-
-[[injection]]
+[[injections]]
 id = "hud"
-kind = "HEAD"
 target = "horizon_client::game::native_hooks::Game<'_>::native_hud"
 helper = "hud.rs"
-bindings = [
-  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
-  { name = "batch", ty = "&mut horizon_client::hud::HudBatch", value = "&mut *batch" },
-  { name = "corners", ty = "&mut horizon_client::extras_hud::Corners", value = "&mut *corners" },
-]
