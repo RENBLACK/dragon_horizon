@@ -24,34 +24,4 @@ jobs:
           for i in {1..5}; do sudo apt-get install -y --fix-missing libasound2-dev libudev-dev && break || sleep 5; done
 
       - name: Run Horizon Native Check
-        run: python3 horizon-mods/native/tools/
-cd ~/dragon_horizon_repo
-
-cat << 'EOF' > .github/workflows/native.yml
-name: Native Build Check
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  native-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Fix DNS and Apt Mirrors
-        run: |
-          sudo bash -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
-          sudo bash -c 'echo "nameserver 1.1.1.1" >> /etc/resolv.conf'
-          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list /etc/apt/sources.list.d/* || true
-          sudo sed -i 's|http://security.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list /etc/apt/sources.list.d/* || true
-          for i in {1..5}; do sudo apt-get update --fix-missing && break || sleep 5; done
-          for i in {1..5}; do sudo apt-get install -y --fix-missing libasound2-dev libudev-dev && break || sleep 5; done
-
-      - name: Run Horizon Native Check
         run: python3 horizon-mods/native/tools/native.py check dragon_horizon
