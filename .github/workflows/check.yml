@@ -9,22 +9,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Testes unitarios
-        run: cargo test
+        run: cargo test --lib
 
   native-check:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
           path: mod
+      - name: Instalar dependencias do sistema (ALSA)
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev
       - name: Clonar horizon-mods
         run: git clone --depth 1 https://github.com/horizon-rust/horizon-mods.git
       - name: Copiar o mod para dentro do horizon-mods
         run: |
           mkdir -p horizon-mods/native/dragon_horizon
           cp -r mod/. horizon-mods/native/dragon_horizon/
-      - name: Ver ajuda do native.py
-        run: python3 horizon-mods/native/tools/native.py --help
-      - name: Check do mod
+      - name: Check do mod nativo
         run: python3 horizon-mods/native/tools/native.py check dragon_horizon
