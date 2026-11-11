@@ -1,4 +1,4 @@
-fn render_dragon_hud() {
+fn render_dragon_hud(_game: &mut horizon_client::game::Game<'_>) {
     crate::game::dragon_horizon::runtime::with_state(|state| {
         let current_ki = state.ki.current();
         let max_ki = state.ki.max();
