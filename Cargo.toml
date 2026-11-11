@@ -1,0 +1,18 @@
+[package]
+name = "dragon_horizon"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "dragon_horizon"
+path = "mixins/dragon_horizon/runtime.rs"
+
+[dependencies]
+
+[dependencies.android-activity]
+version = "0.6"
+features = ["game-activity"]
+
+[target.'cfg(target_os = "android")'.dependencies]
+android-activity = { version = "0.6", features = ["game-activity"] }
+

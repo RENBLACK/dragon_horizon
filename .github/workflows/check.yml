@@ -1,0 +1,30 @@
+name: check
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Testes unitarios
+        run: cargo test
+
+  native-check:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: mod
+      - name: Clonar horizon-mods
+        run: git clone --depth 1 https://github.com/horizon-rust/horizon-mods.git
+      - name: Copiar o mod para dentro do horizon-mods
+        run: |
+          mkdir -p horizon-mods/native/dragon_horizon
+          cp -r mod/. horizon-mods/native/dragon_horizon/
+      - name: Ver ajuda do native.py
+        run: python3 horizon-mods/native/tools/native.py --help
+      - name: Check do mod
+        run: python3 horizon-mods/native/tools/native.py check dragon_horizon
