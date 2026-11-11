@@ -4,6 +4,7 @@
 use std::sync::{Mutex, OnceLock};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
+#[allow(dead_code)]
 pub struct Attributes {
     pub strength: u32,
     pub defense: u32,
@@ -18,12 +19,14 @@ impl Default for Attributes {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct Ki {
     current: f32,
     max: f32,
     regen_per_tick: f32,
 }
 
+#[allow(dead_code)]
 impl Ki {
     pub fn new(max: f32, regen_per_tick: f32) -> Self {
         let max = max.max(1.0);
@@ -58,9 +61,11 @@ impl Ki {
 }
 
 #[derive(Debug, Clone, Copy)]
+#[allow(dead_code)]
 pub enum Stat { Strength, Defense, KiPower, Vitality }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct PlayerState {
     pub attrs: Attributes,
     pub ki: Ki,
@@ -68,6 +73,7 @@ pub struct PlayerState {
     last_update: Option<std::time::Instant>,
 }
 
+#[allow(dead_code)]
 impl PlayerState {
     pub fn new() -> Self {
         let attrs = Attributes::default();
