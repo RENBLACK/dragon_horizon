@@ -51,5 +51,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dragon_horizon-android-arm64
-          path: "**/target/aarch64-linux-android/release/*.so"
+          path: |
+            dragon_horizon/target/aarch64-linux-android/release/*.so
+            target/aarch64-linux-android/release/*.so
           if-no-files-found: error
+          
