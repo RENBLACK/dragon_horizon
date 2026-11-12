@@ -50,13 +50,7 @@ jobs:
       - name: Collect and Copy .so Artifact
         run: |
           mkdir -p output_so
-          if [ -f "dragon_horizon/target/aarch64-linux-android/release/libdragon_horizon.so" ]; then
-            cp dragon_horizon/target/aarch64-linux-android/release/libdragon_horizon.so output_so/
-          elif [ -f "target/aarch64-linux-android/release/libdragon_horizon.so" ]; then
-            cp target/aarch64-linux-android/release/libdragon_horizon.so output_so/
-          else
-            find . -path "*/release/libdragon_horizon.so" -exec cp {} output_so/ \;
-          fi
+          find . -name "lib*.so" -not -path "*/android-ndk*" -not -path "*/.*" -exec cp {} output_so/ \;
           ls -la output_so/
 
       - name: Upload Compiled Mod (.so)
