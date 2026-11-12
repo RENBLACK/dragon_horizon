@@ -49,11 +49,14 @@ jobs:
 
       - name: Collect and Copy .so Artifact
         run: |
-          echo "=== TODOS OS FICHEIROS .SO NO PROJETO ==="
-          find . -name "*.so"
           mkdir -p output_so
-          find . -name "*.so" -exec cp {} output_so/ \;
-          echo "=== CONTEÚDO DA PASTA OUTPUT_SO ==="
+          if [ -f "dragon_horizon/target/aarch64-linux-android/release/libdragon_horizon.so" ]; then
+            cp dragon_horizon/target/aarch64-linux-android/release/libdragon_horizon.so output_so/
+          elif [ -f "target/aarch64-linux-android/release/libdragon_horizon.so" ]; then
+            cp target/aarch64-linux-android/release/libdragon_horizon.so output_so/
+          else
+            find . -path "*/release/libdragon_horizon.so" -exec cp {} output_so/ \;
+          fi
           ls -la output_so/
 
       - name: Upload Compiled Mod (.so)
