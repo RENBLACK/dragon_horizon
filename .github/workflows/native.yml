@@ -47,9 +47,15 @@ jobs:
             find . -name "Cargo.toml" -execdir cargo build --release --target aarch64-linux-android \;
           fi
 
+      - name: Collect and Copy .so Artifact
+        run: |
+          mkdir -p output_so
+          find . -name "*.so" -exec cp {} output_so/ \;
+          ls -la output_so/
+
       - name: Upload Compiled Mod (.so)
         uses: actions/upload-artifact@v4
         with:
           name: dragon_horizon-android-arm64
-          path: "**/release/*.so"
+          path: output_so/*.so
           if-no-files-found: error
