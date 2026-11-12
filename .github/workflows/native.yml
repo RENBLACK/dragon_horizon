@@ -19,7 +19,22 @@ jobs:
           sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list /etc/apt/sources.list.d/* || true
           sudo sed -i 's|http://security.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list /etc/apt/sources.list.d/* || true
           for i in {1..5}; do sudo apt-get update --fix-missing && break || sleep 5; done
-          for i in {1..5}; do sudo apt-get install -y --fix-missing libasound2-dev libudev-dev build-essential && break || sleep 5; done
+          for i in {1..5}; do sudo apt-get install -y --fix-missing libasound2-dev libudev-dev build-essential curl unzip && break || sleep 5; done
+
+      - name: Setup Android NDK and Toolchain
+        run: |
+          echo "Installing Android NDK..."
+          ANDROID_NDK_VERSION="r26b"
+          curl -LO https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux.zip
+          unzip -q android-ndk-${ANDROID_NDK_VERSION}-linux.zip
+          echo "ANDROID_NDK_HOME=$PWD/android-ndk-${ANDROID_NDK_VERSION}" >> $GITHUB_ENV
+          
+          # Configurar toolchain C++ do NDK para aarch64
+          TOOLCHAIN=$PWD/android-ndk-${ANDROID_NDK_VERSION}/toolchains/llvm/prebuilt/linux-x86_64
+          echo "$TOOLCHAIN/bin" >> $GITHUB_PATH
+          
+          echo "CC_aarch64_linux_android=$TOOLCHAIN/bin/aarch64-linux-android30-clang" >> $GITHUB_ENV
+          echo "CXX_aarch64_linux_android=$TOOLCHAIN/bin/aarch64-linux-android30-clang++" >> $GITHUB_ENV
 
       - name: Setup Rust Toolchain with Android Target
         uses: dtolnay/rust-toolchain@stable
