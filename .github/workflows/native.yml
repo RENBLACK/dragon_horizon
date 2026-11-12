@@ -50,7 +50,7 @@ jobs:
       - name: Collect and Copy .so Artifact
         run: |
           mkdir -p output_so
-          find . -name "*.so" -exec cp {} output_so/ \;
+          find . \( -name "libdragon_horizon*.so" -o -name "dragon_horizon.so" \) -exec cp {} output_so/ \;
           ls -la output_so/
 
       - name: Upload Compiled Mod (.so)
