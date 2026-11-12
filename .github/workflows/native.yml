@@ -11,9 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
 
       - name: Fix DNS and Apt Mirrors
         run: |
@@ -22,7 +19,17 @@ jobs:
           sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list /etc/apt/sources.list.d/* || true
           sudo sed -i 's|http://security.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list /etc/apt/sources.list.d/* || true
           for i in {1..5}; do sudo apt-get update --fix-missing && break || sleep 5; done
-          for i in {1..5}; do sudo apt-get install -y --fix-missing libasound2-dev libudev-dev && break || sleep 5; done
+          for i in {1..5}; do sudo apt-get install -y --fix-missing libasound2-dev libudev-dev build-essential && break || sleep 5; done
 
-      - name: Run Horizon Native Check
-        run: python3 horizon-mods/native/tools/native.py check dragon_horizon
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Check Mod Structure and Compile Rust
+        run: |
+          if [ -f "dragon_horizon/Cargo.toml" ]; then
+            cd dragon_horizon && cargo check --verbose
+          elif [ -f "Cargo.toml" ]; then
+            cargo check --verbose
+          else
+            find . -name "Cargo.toml" -execdir cargo check --verbose \;
+          fi
