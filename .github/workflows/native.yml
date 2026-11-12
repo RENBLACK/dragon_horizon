@@ -49,8 +49,11 @@ jobs:
 
       - name: Collect and Copy .so Artifact
         run: |
+          echo "=== TODOS OS FICHEIROS .SO NO PROJETO ==="
+          find . -name "*.so"
           mkdir -p output_so
-          find . \( -name "libdragon_horizon*.so" -o -name "dragon_horizon.so" \) -exec cp {} output_so/ \;
+          find . -name "*.so" -exec cp {} output_so/ \;
+          echo "=== CONTEÚDO DA PASTA OUTPUT_SO ==="
           ls -la output_so/
 
       - name: Upload Compiled Mod (.so)
